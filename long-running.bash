@@ -2,9 +2,14 @@
 #
 # Relies on http://www.twistedmatrix.com/users/glyph/preexec.bash.txt
 
-if [ -f preexec.bash ]; then
-    . preexec.bash
+if [ -f ~/src/shell-tools/preexec.bash ]; then
+    . ~/src/shell-tools/preexec.bash
+else
+    echo "Could not find preexec.bash"
 fi
+
+
+LONG_RUNNING_COMMAND_TIMEOUT=10
 
 
 function notify_when_long_running_commands_finish_install() {
@@ -49,7 +54,6 @@ function notify_when_long_running_commands_finish_install() {
     _LAST_COMMAND_STARTED_CACHE=$RUNNING_COMMANDS_DIR/$$
 
     function precmd () {
-        local TIMEOUT=30
 
         if [[ -r $_LAST_COMMAND_STARTED_CACHE ]]; then
 
@@ -59,7 +63,7 @@ function notify_when_long_running_commands_finish_install() {
             if [[ -n $last_command_started ]]; then
                 local now=$(date -u +%s)
                 local time_taken=$(( $now - $last_command_started ))
-                if [[ $time_taken -gt $TIMEOUT ]]; then
+                if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]]; then
                     notify-send \
                         -i utilities-terminal \
                         -u low \
