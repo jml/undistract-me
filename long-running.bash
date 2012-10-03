@@ -8,14 +8,17 @@
 
 set -e
 
-LONG_RUNNING_COMMAND_TIMEOUT=10
+# Default timeout is 10 seconds.
+if [ -z "$LONG_RUNNING_COMMAND_TIMEOUT" ]; then
+    LONG_RUNNING_COMMAND_TIMEOUT=10
+fi
 
-
-if [ -z $LONG_RUNNING_PREEXEC_LOCATION ]; then
+# The pre-exec hook functionality is in a separate branch.
+if [ -z "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
     LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
 fi
 
-if [ -f $LONG_RUNNING_PREEXEC_LOCATION ]; then
+if [ -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
     . $LONG_RUNNING_PREEXEC_LOCATION
 else
     echo "Could not find preexec.bash"
@@ -70,7 +73,7 @@ function notify_when_long_running_commands_finish_install() {
             local last_command_started=$(head -1 $last_command_started_cache)
             local last_command=$(tail -n +2 $last_command_started_cache)
 
-            if [[ -n $last_command_started ]]; then
+            if [[ -n "$last_command_started" ]]; then
                 local now=$(date -u +%s)
                 local time_taken=$(( $now - $last_command_started ))
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]]; then
