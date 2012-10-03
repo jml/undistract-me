@@ -1,0 +1,7 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: undistract-me
+Upstream-Contact: Jonathan M. Lange <jml@mumak.net>
+
+Files: *
+Copyright: Public Domain
+License: public-domain

@@ -1,0 +1,17 @@
+Source: undistract-me
+Section: misc
+Priority: extra
+Standards-Version: 3.9.3
+Maintainer: Jonathan M. Lange <jml@mumak.net>
+Build-Depends: debhelper (>= 7)
+Homepage: http://launchpad.net/undistract-me/
+
+Package: undistract-me
+Architecture: all
+Section: misc
+Priority: extra
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin
+Description: Notifies you when long-running terminal commands complete.
+ .
+ Uses notify-send to alert users whenever a shell command completes that took
+ more than 10s to do so.  Only works with bash.

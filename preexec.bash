@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # preexec.bash -- Bash support for ZSH-like 'preexec' and 'precmd' functions.
 
 # The 'preexec' function is executed before each interactive command is

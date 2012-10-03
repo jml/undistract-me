@@ -1,0 +1,4 @@
+long-running.bash usr/share/undistract-me
+preexec.bash usr/share/undistract-me
+README.md usr/share/doc/undistract-me
+undistract-me.sh etc/profile.d
