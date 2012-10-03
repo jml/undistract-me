@@ -6,8 +6,6 @@
 # of seconds to return to the shell.  e.g. if LONG_RUNNING_COMMAND_TIMEOUT=10,
 # then 'sleep 11' will always generate a notification.
 
-set -e
-
 # Default timeout is 10 seconds.
 if [ -z "$LONG_RUNNING_COMMAND_TIMEOUT" ]; then
     LONG_RUNNING_COMMAND_TIMEOUT=10
@@ -59,6 +57,7 @@ function notify_when_long_running_commands_finish_install() {
             fi
         fi
     done
+    unset pid_file
 
     # The file containing information about the currently running command for
     # this shell.  Either empty (meaning no command is running) or in the
