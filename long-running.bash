@@ -9,6 +9,9 @@ else
 fi
 
 
+# Generate a notification for any command that takes longer than this amount
+# of seconds to return to the shell.  e.g. if LONG_RUNNING_COMMAND_TIMEOUT=10,
+# then 'sleep 11' will always generate a notification.
 LONG_RUNNING_COMMAND_TIMEOUT=10
 
 
