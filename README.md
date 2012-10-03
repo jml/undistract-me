@@ -1,0 +1,39 @@
+# undistract-me
+
+## tl;dr
+
+    $ bzr checkout --lightweight lp:~jml/+junk/shell-tools
+    $ . shell-tools/long-running.bash
+    $ notify_when_long_running_commands_finish_install
+
+
+## What is this?
+
+Does this ever happen to you?
+
+You're doing some work, and as part of that you need to run a command on the
+terminal that takes a little while to finish.  You run the command, watch it
+for maybe a second and then switch to doing something else – checking
+email or something.
+
+You get so deeply involved in your email that twenty minutes fly by.  When
+you switch back to your terminal the command has finished, but you've got no
+idea whether it was nineteen seconds ago or nineteen *minutes* ago.
+
+This happens to me a lot.  I'm just not disciplined enough to sit and watch
+commands, and I'm not prescient enough to add something to each invocation to
+tell me.  What I want is something that alerts me whenever long running
+commands finish.
+
+This is it.
+
+Install this, and then you'll get a notification when any command finishes
+that took longer than ten seconds to finish.
+
+## Credits
+
+[Glyph Lefkowitz](http://glyph.twistedmatrix.com/) wrote
+[a neat hack to provide ZSH-like preexec support for bash](http://glyf.livejournal.com/63106.html).
+
+A lot of help from [Chris Jones](http://www.tenshu.net/) of
+[Terminator](http://www.tenshu.net/p/terminator.html).
