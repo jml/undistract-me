@@ -2,17 +2,24 @@
 #
 # Relies on http://www.twistedmatrix.com/users/glyph/preexec.bash.txt
 
-if [ -f ~/src/shell-tools/preexec.bash ]; then
-    . ~/src/shell-tools/preexec.bash
-else
-    echo "Could not find preexec.bash"
-fi
-
-
 # Generate a notification for any command that takes longer than this amount
 # of seconds to return to the shell.  e.g. if LONG_RUNNING_COMMAND_TIMEOUT=10,
 # then 'sleep 11' will always generate a notification.
+
+set -e
+
 LONG_RUNNING_COMMAND_TIMEOUT=10
+
+
+if [ -z $LONG_RUNNING_PREEXEC_LOCATION ]; then
+    LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
+fi
+
+if [ -f $LONG_RUNNING_PREEXEC_LOCATION ]; then
+    . $LONG_RUNNING_PREEXEC_LOCATION
+else
+    echo "Could not find preexec.bash"
+fi
 
 
 function notify_when_long_running_commands_finish_install() {
@@ -28,13 +35,13 @@ function notify_when_long_running_commands_finish_install() {
     # subshell), each named for their PID.  Each file is either empty,
     # indicating that no command is running, or contains information about the
     # currently running command for that shell.
-    local RUNNING_COMMANDS_DIR=~/.cache/running-commands
+    local running_commands_dir=~/.cache/running-commands
 
-    mkdir -p $RUNNING_COMMANDS_DIR
+    mkdir -p $running_commands_dir
 
     # Clear out any old PID files.  That is, any files named after a PID
     # that's not currently running bash.
-    for pid_file in $RUNNING_COMMANDS_DIR/*; do
+    for pid_file in $running_commands_dir/*; do
         local pid=$(basename $pid_file)
         # If $pid is numeric, then check for a running bash process.
         case $pid in
@@ -54,14 +61,14 @@ function notify_when_long_running_commands_finish_install() {
     # this shell.  Either empty (meaning no command is running) or in the
     # format "$start_time\n$command", where $command is the currently running
     # command and $start_time is when it started (in UNIX epoch format, UTC).
-    _LAST_COMMAND_STARTED_CACHE=$RUNNING_COMMANDS_DIR/$$
+    last_command_started_cache=$running_commands_dir/$$
 
     function precmd () {
 
-        if [[ -r $_LAST_COMMAND_STARTED_CACHE ]]; then
+        if [[ -r $last_command_started_cache ]]; then
 
-            local last_command_started=$(head -1 $_LAST_COMMAND_STARTED_CACHE)
-            local last_command=$(tail -n +2 $_LAST_COMMAND_STARTED_CACHE)
+            local last_command_started=$(head -1 $last_command_started_cache)
+            local last_command=$(tail -n +2 $last_command_started_cache)
 
             if [[ -n $last_command_started ]]; then
                 local now=$(date -u +%s)
@@ -75,13 +82,13 @@ function notify_when_long_running_commands_finish_install() {
                 fi
             fi
             # No command is running, so clear the cache.
-            echo -n > $_LAST_COMMAND_STARTED_CACHE
+            echo -n > $last_command_started_cache
         fi
     }
 
     function preexec () {
-        date -u +%s > $_LAST_COMMAND_STARTED_CACHE
-        echo "$1" >> $_LAST_COMMAND_STARTED_CACHE
+        date -u +%s > $last_command_started_cache
+        echo "$1" >> $last_command_started_cache
     }
 
     preexec_install
