@@ -1,10 +1,22 @@
 # undistract-me
 
-## tl;dr
+Notifies you when long-running terminal commands complete.
 
-    $ bzr checkout --lightweight lp:~jml/+junk/shell-tools
-    $ . shell-tools/long-running.bash
+## Installation
+
+### From the branch
+
+    $ bzr checkout --lightweight lp:undistract-me
+    $ . undistract-me/long-running.bash
     $ notify_when_long_running_commands_finish_install
+
+### From a PPA
+
+    $ sudo add-apt-repository ppa:undistract-me-packagers/daily
+    $ sudo apt-get install undistract-me
+
+Then run a login shell: start a whole new Gnome Terminal, run `bash --login`
+or log out then log in again.
 
 
 ## What is this?
@@ -29,6 +41,25 @@ This is it.
 
 Install this, and then you'll get a notification when any command finishes
 that took longer than ten seconds to finish.
+
+
+## Configuration
+
+By default, a long-running command is any command that takes more than 10s to
+complete.  If this default is not right for you, set
+`LONG_RUNNING_COMMAND_TIMEOUT` to a different number of seconds and export it.
+
+## Licensing
+
+This is all in the public domain.
+
+## Getting help
+
+There's no dedicated IRC channel, but feel free to ping `jml` on Freenode,
+probably in the `#ubuntu-devel` channel.
+
+Alternatively, ask questions or file bugs on the
+[undistract-me](https://launchpad.net/undistract-me) Launchpad project.
 
 ## Credits
 
