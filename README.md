@@ -51,8 +51,7 @@ complete.  If this default is not right for you, set
 
 ## Licensing
 
-All of undistract-me, including this file, is made available with the MIT
-license.  See `LICENSE` for details.
+This is all in the public domain.
 
 ## Getting help
 
