@@ -51,7 +51,7 @@ complete.  If this default is not right for you, set
 
 ## Licensing
 
-All of undistract-me, including this file, is made available with the MIT
+All of undistract-me, including this file, is made available with the Expat
 license.  See `LICENSE` for details.
 
 ## Getting help
