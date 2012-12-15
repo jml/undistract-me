@@ -1,3 +1,5 @@
+# Copyright (c) 2008-2012 undistract-me developers. See LICENSE for details.
+#
 # Source this, and then run notify_when_long_running_commands_finish_install
 #
 # Relies on http://www.twistedmatrix.com/users/glyph/preexec.bash.txt

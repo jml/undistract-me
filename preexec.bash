@@ -1,3 +1,5 @@
+# Copyright (c) 2008-2012 undistract-me developers. See LICENSE for details.
+#
 # preexec.bash -- Bash support for ZSH-like 'preexec' and 'precmd' functions.
 
 # The 'preexec' function is executed before each interactive command is
