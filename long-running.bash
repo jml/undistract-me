@@ -38,37 +38,38 @@ function notify_when_long_running_commands_finish_install() {
 
     function precmd () {
 
-        if [[ -n "$last_command_started" ]]; then
+        if [[ -n "$__udm_last_command_started" ]]; then
             local now current_window
 
             printf -v now "%(%s)T" -1
             current_window=$(active_window_id)
-            if [[ $current_window != $last_window ]] ||
+            if [[ $current_window != $__udm_last_window ]] ||
                 [[ $current_window == "nowindowid" ]] ; then
-                local time_taken=$(( $now - $last_command_started ))
+                local time_taken=$(( $now - $__udm_last_command_started ))
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
                     [[ -n $DISPLAY ]] ; then
                     notify-send \
                         -i utilities-terminal \
                         -u low \
                         "Long command completed" \
-                        "\"$last_command\" took $time_taken seconds"
+                        "\"$__udm_last_command\" took $time_taken seconds"
                 fi
                 if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
                     [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] ; then
                     # put in brackets to make it quiet
                     ( $LONG_RUNNING_COMMAND_CUSTOM \
-                        "\"$last_command\" took $time_taken seconds" & )
+                        "\"$__udm_last_command\" took $time_taken seconds" & )
                 fi
             fi
         fi
     }
 
     function preexec () {
-        last_command_started=$(printf "%(%s)T\n" -1)
-        last_command=$(echo "$1")
-        last_window=$(active_window_id)
+	# use __udm to avoid global name conflicts
+        __udm_last_command_started=$(printf "%(%s)T\n" -1)
+        __udm_last_command=$(echo "$1")
+        __udm_last_window=$(active_window_id)
     }
 
     preexec_install
