@@ -27,13 +27,6 @@ fi
 
 function notify_when_long_running_commands_finish_install() {
 
-    # TODO: Only notify if the shell doesn't have focus.  One way to do this
-    # is to contact Terminator with our unique id (stored in the environment
-    # as TERMINATOR_something_or_other) and ask it if we have focus.  Another
-    # way would be to use xprop to get the window ID and compare against
-    # $WINDOWID (or the PID & then process tree if necessary).  That will
-    # report false positives for tabbed terminals.
-
     # A directory containing files for each currently running shell (not
     # subshell), each named for their PID.  Each file is either empty,
     # indicating that no command is running, or contains information about the
@@ -61,6 +54,15 @@ function notify_when_long_running_commands_finish_install() {
     done
     unset pid_file
 
+    function active_window_id () {
+        if [[ -n $DISPLAY ]] ; then
+            set - $(xprop -root _NET_ACTIVE_WINDOW)
+            echo $5
+            return
+        fi
+        echo nowindowid
+    }
+
     # The file containing information about the currently running command for
     # this shell.  Either empty (meaning no command is running) or in the
     # format "$start_time\n$command", where $command is the currently running
@@ -71,18 +73,36 @@ function notify_when_long_running_commands_finish_install() {
 
         if [[ -r $last_command_started_cache ]]; then
 
-            local last_command_started=$(head -1 $last_command_started_cache)
-            local last_command=$(tail -n +2 $last_command_started_cache)
+            local last_command_started last_command last_window
 
+            {
+                read last_command_started
+                read last_command
+                read last_window
+            } < $last_command_started_cache
             if [[ -n "$last_command_started" ]]; then
-                local now=$(date -u +%s)
-                local time_taken=$(( $now - $last_command_started ))
-                if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]]; then
-                    notify-send \
-                        -i utilities-terminal \
-                        -u low \
-                        "Long command completed" \
-                        "\"$last_command\" took $time_taken seconds"
+                local now current_window
+
+                printf -v now "%(%s)T" -1
+                current_window=$(active_window_id)
+                if [[ $current_window != $last_window ]] ||
+                   [[ $current_window == "nowindowid" ]] ; then
+                    local time_taken=$(( $now - $last_command_started ))
+                    if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
+                       [[ -n $DISPLAY ]] ; then
+                        notify-send \
+                          -i utilities-terminal \
+                          -u low \
+                          "Long command completed" \
+                          "\"$last_command\" took $time_taken seconds"
+                    fi
+                    if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
+                       [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
+                       [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] ; then
+                        # put in brackets to make it quiet
+                        ( $LONG_RUNNING_COMMAND_CUSTOM \
+                            "\"$last_command\" took $time_taken seconds" & )
+                    fi
                 fi
             fi
             # No command is running, so clear the cache.
@@ -91,8 +111,9 @@ function notify_when_long_running_commands_finish_install() {
     }
 
     function preexec () {
-        date -u +%s > $last_command_started_cache
+        printf "%(%s)T\n" -1 > $last_command_started_cache
         echo "$1" >> $last_command_started_cache
+        active_window_id >> $last_command_started_cache
     }
 
     preexec_install
