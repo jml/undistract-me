@@ -61,27 +61,26 @@ function preexec_invoke_cmd () {
 # environment to attempt to detect if the current command is being invoked
 # interactively, and invoke 'preexec' if so.
 function preexec_invoke_exec () {
+    if [[ -z "$preexec_interactive_mode" ]]
+    then
+        # We're doing something related to displaying the prompt.  Let the
+        # prompt set the title instead of me.
+        return
+    fi
     if [[ -n "$COMP_LINE" ]]
     then
         # We're in the middle of a completer.  This obviously can't be
         # an interactively issued command.
         return
     fi
-    if [[ -z "$preexec_interactive_mode" ]]
+    # If we're in a subshell, then the prompt won't be re-displayed to put
+    # us back into interactive mode, so let's not set the variable back.
+    # In other words, if you have a subshell like
+    #   (sleep 1; sleep 2)
+    # You want to see the 'sleep 2' as a set_command_title as well.
+    if [[ 0 -eq "$BASH_SUBSHELL" ]]
     then
-        # We're doing something related to displaying the prompt.  Let the
-        # prompt set the title instead of me.
-        return
-    else
-        # If we're in a subshell, then the prompt won't be re-displayed to put
-        # us back into interactive mode, so let's not set the variable back.
-        # In other words, if you have a subshell like
-        #   (sleep 1; sleep 2)
-        # You want to see the 'sleep 2' as a set_command_title as well.
-        if [[ 0 -eq "$BASH_SUBSHELL" ]]
-        then
-            preexec_interactive_mode=""
-        fi
+        preexec_interactive_mode=""
     fi
     if [[ "preexec_invoke_cmd" == "$BASH_COMMAND" ]]
     then
