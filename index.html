@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>undistract-me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="alternate" type="application/rss+xml"
+          title="undistract-me" href="planet/rss20.xml" />
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+  <body>
+
+  <!-- Navbar
+    ================================================== -->
+ <div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+     <div class="container">
+       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+       </a>
+       <a class="brand" href="../">undistract-me</a>
+       <div class="nav-collapse" id="main-menu">
+         <ul class="nav">
+           <li><a href="#install">Install</a></li>
+           <li><a href="#about">About</a></li>
+           <li><a href="#contact">Contact</a></li>
+         </ul>
+       </div>
+     </div>
+   </div>
+ </div>
+
+    <div class="container">
+
+      <div class="hero-unit">
+        <h1><img src="img/gnome-terminal.svg"></img> undistract-me</h1>
+        <p>Alerts you when long-running commands finally complete.</p>
+      </div>
+
+      <div class="row">
+        <div class="span12">
+          <p class="lead">
+            Install this to get a notification when any command finishes that
+            took longer than ten seconds to finish.
+          </p>
+        </div>
+      </div>
+
+      <div id="install" class="row">
+
+        <div class="span6">
+          <h2>
+            <a href="https://launchpad.net/~undistract-me-packagers/+archive/daily">Install from PPA</a>
+          </h2>
+          <p>
+            <pre>
+$ sudo add-apt-repository ppa:undistract-me-packagers/daily
+$ sudo apt-get update
+$ sudo apt-get install undistract-me</pre>
+          </p>
+        </div>
+
+        <div class="span6">
+          <h2>
+            <a href="https://code.launchpad.net/undistract-me">
+              Get the code
+            </a>
+          </h2>
+          <p>
+            <pre>
+$ bzr branch lp:undistract-me
+$ . undistract-me/long-running.bash
+$ notify_when_long_running_commands_finish_install</pre>
+          </p>
+        </div>
+      </div>
+
+      <div id="about" class="row">
+        <div class="span7">
+
+          <h2>Some commands take <em>ages</em> to run</h2>
+          <p>
+            You're doing some work, and as part of that you need to run a
+            command on the terminal that takes a little while to finish.
+            Perhaps it's your test suite, your build process, or an unusually
+            big data run.
+          </p>
+          <h4>Watching commands is boring</h4>
+          <p>
+            You run the command, watch it for maybe a second and then switch
+            to doing something else&mdash;answering email or something more
+            useful and fun than staring at a terminal.
+          </p>
+          <h4>Time flies when you're distracted</h4>
+          <p>
+            You get so deeply involved in your email that twenty minutes fly
+            by.  When you switch back to your terminal the command has
+            finished, but you've got no idea whether it was nineteen seconds
+            ago or nineteen <em>minutes</em> ago.
+          </p>
+          <h4>Undistract me, please</h4>
+          <p>
+            This happens to me a lot.  I'm not <em>prescient</em> enough to
+            predict which commands will take a long time, and I'm
+            not <em>disciplined</em> to add something to the end of each one.
+            If you are like me, then what we both need is something that
+            alerts us whenever long running commands finish.
+          </p>
+          <p class="lead">
+            This is it.
+          </p>
+        </div>
+      </div>
+
+      <div id="contact" class="row">
+        <div class="span4">
+          <h3>Doesn't work? <a class="btn btn-primary" href="https://bugs.launchpad.net/undistract-me/+filebug">File a bug</a></h3>
+          <p>
+            undistract-me is a <em>very</em> simple program.  It's almost
+            certainly going to work for you.  However, if you do encounter a
+            problem, please let us know about it.
+          </p>
+        </div>
+        <div class="span4">
+          <h3>Puzzled? <a class="btn btn-primary"
+          href="https://answers.launchpad.net/undistract-me/+addquestion">Ask
+              a question</a></h3>
+          <p>
+            Alternatively, find <code>jml</code> on Freenode in
+            the <code>#ubuntu-devel</code> channel.
+          </p>
+        </div>
+        <div class="span4">
+          <h3>Delighted? <span class="g-plusone" data-annotation="none" data-href="http://mumak.net/undistract-me/"></span> </h3>
+          <p>
+            Then please let me know.  My name is Jonathan Lange.
+            I'm <code>jml</code> on Freenode, myself
+            on <a href="https://plus.google.com/115348217455779620753/posts">Google+</a>,
+            and <a href="http://twitter.com/mumak">@mumak</a> on Twitter
+            (although I hardly ever use the last).
+          </p>
+      </div>
+
+      <hr />
+
+      <footer>
+        <p>Copyright &copy; Jonathan Lange 2012</p>
+      </footer>
+
+    </div>
+
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Place this tag after the last +1 button tag. -->
+    <script type="text/javascript">
+      (function() {
+      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+      po.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+  </body>
+</html>
