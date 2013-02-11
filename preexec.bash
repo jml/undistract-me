@@ -30,13 +30,6 @@ then
     SCREEN_RUN_USER="$LC_SCREEN_RUN_USER"
 fi
 
-# This variable describes whether we are currently in "interactive mode";
-# i.e. whether this shell has just executed a prompt and is waiting for user
-# input.  It documents whether the current command invoked by the trace hook is
-# run interactively by the user; it's set immediately after the prompt hook,
-# and unset as soon as the trace hook is run.
-preexec_interactive_mode=""
-
 # Default do-nothing implementation of preexec.
 function preexec () {
     true
@@ -53,7 +46,7 @@ function precmd () {
 # command is likely interactive.
 function preexec_invoke_cmd () {
     precmd
-    preexec_interactive_mode="yes"
+    trap 'preexec_invoke_exec' DEBUG
 }
 
 # This function is installed as the DEBUG trap.  It is invoked before each
@@ -61,12 +54,6 @@ function preexec_invoke_cmd () {
 # environment to attempt to detect if the current command is being invoked
 # interactively, and invoke 'preexec' if so.
 function preexec_invoke_exec () {
-    if [[ -z "$preexec_interactive_mode" ]]
-    then
-        # We're doing something related to displaying the prompt.  Let the
-        # prompt set the title instead of me.
-        return
-    fi
     if [[ -n "$COMP_LINE" ]]
     then
         # We're in the middle of a completer.  This obviously can't be
@@ -80,7 +67,7 @@ function preexec_invoke_exec () {
     # You want to see the 'sleep 2' as a set_command_title as well.
     if [[ 0 -eq "$BASH_SUBSHELL" ]]
     then
-        preexec_interactive_mode=""
+        trap '' DEBUG
     fi
     if [[ "preexec_invoke_cmd" == "$BASH_COMMAND" ]]
     then
@@ -92,7 +79,7 @@ function preexec_invoke_exec () {
 
         # Given their buggy interaction between BASH_COMMAND and debug traps,
         # versions of bash prior to 3.1 can't detect this at all.
-        preexec_interactive_mode=""
+        trap '' DEBUG
         return
     fi
 
@@ -126,7 +113,6 @@ function preexec_install () {
     else
         PROMPT_COMMAND="preexec_invoke_cmd";
     fi
-    trap 'preexec_invoke_exec' DEBUG
 }
 
 # Since this is the reason that 99% of everybody is going to bother with a
