@@ -69,3 +69,7 @@ Alternatively, ask questions or file bugs on the
 
 A lot of help from [Chris Jones](http://www.tenshu.net/) of
 [Terminator](http://www.tenshu.net/p/terminator.html).
+
+[Mikey Neuling](https://github.com/mikey/) and Stephen Rothwell have made huge
+improvements to the performance and quality of the shell script.  I'm amazed,
+humbled and grateful.
