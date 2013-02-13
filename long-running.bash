@@ -36,6 +36,23 @@ function notify_when_long_running_commands_finish_install() {
         echo nowindowid
     }
 
+    function sec_to_human () {
+        local H=''
+        local M=''
+        local S=''
+
+        local h=$(($1 / 3600))
+        [ $h -gt 0 ] && H="${h} hour" && [ $h -gt 1 ] && H="${H}s"
+
+        local m=$((($1 / 60) % 60))
+        [ $m -gt 0 ] && M=" ${m} min" && [ $m -gt 1 ] && M="${M}s"
+
+        local s=$(($1 % 60))
+        [ $s -gt 0 ] && S=" ${s} sec" && [ $s -gt 1 ] && S="${S}s"
+
+        echo $H$M$S
+    }
+
     function precmd () {
 
         if [[ -n "$__udm_last_command_started" ]]; then
@@ -46,20 +63,21 @@ function notify_when_long_running_commands_finish_install() {
             if [[ $current_window != $__udm_last_window ]] ||
                 [[ $current_window == "nowindowid" ]] ; then
                 local time_taken=$(( $now - $__udm_last_command_started ))
+                local time_taken_human=$(sec_to_human $time_taken)
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
                     [[ -n $DISPLAY ]] ; then
                     notify-send \
                         -i utilities-terminal \
                         -u low \
                         "Long command completed" \
-                        "\"$__udm_last_command\" took $time_taken seconds"
+                        "\"$__udm_last_command\" took $time_taken_human"
                 fi
                 if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
                     [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] ; then
                     # put in brackets to make it quiet
                     ( $LONG_RUNNING_COMMAND_CUSTOM \
-                        "\"$__udm_last_command\" took $time_taken seconds" & )
+                        "\"$__udm_last_command\" took $time_taken_human" & )
                 fi
             fi
         fi
