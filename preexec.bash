@@ -60,15 +60,8 @@ function preexec_invoke_exec () {
         # an interactively issued command.
         return
     fi
-    # If we're in a subshell, then the prompt won't be re-displayed to put
-    # us back into interactive mode, so let's not set the variable back.
-    # In other words, if you have a subshell like
-    #   (sleep 1; sleep 2)
-    # You want to see the 'sleep 2' as a set_command_title as well.
-    if [[ 0 -eq "$BASH_SUBSHELL" ]]
-    then
-        trap '' DEBUG
-    fi
+    trap '' DEBUG
+
     if [[ "preexec_invoke_cmd" == "$BASH_COMMAND" ]]
     then
         # Sadly, there's no cleaner way to detect two prompts being displayed
@@ -79,7 +72,6 @@ function preexec_invoke_exec () {
 
         # Given their buggy interaction between BASH_COMMAND and debug traps,
         # versions of bash prior to 3.1 can't detect this at all.
-        trap '' DEBUG
         return
     fi
 
