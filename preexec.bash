@@ -87,6 +87,10 @@ function preexec_invoke_exec () {
     preexec "$this_command"
 }
 
+function preexec_set_exit () {
+    __preexec_exit_status=$?
+}
+
 # Execute this to set up preexec and precmd execution.
 function preexec_install () {
 
