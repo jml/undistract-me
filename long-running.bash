@@ -66,9 +66,15 @@ function notify_when_long_running_commands_finish_install() {
                 local time_taken_human=$(sec_to_human $time_taken)
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
                     [[ -n $DISPLAY ]] ; then
+		    local icon=dialog-information
+		    local urgency=low
+		    if [[ $__preexec_exit_status != 0 ]]; then
+			icon=dialog-error
+			urgency=normal
+		    fi
                     notify-send \
-                        -i utilities-terminal \
-                        -u low \
+                        -i $icon \
+                        -u $urgency \
                         "Long command completed" \
                         "\"$__udm_last_command\" took $time_taken_human"
                 fi
