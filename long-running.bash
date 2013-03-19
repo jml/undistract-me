@@ -82,6 +82,7 @@ function notify_when_long_running_commands_finish_install() {
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
                     [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] ; then
                     # put in brackets to make it quiet
+		    export __preexec_exit_status
                     ( $LONG_RUNNING_COMMAND_CUSTOM \
                         "\"$__udm_last_command\" took $time_taken_human" & )
                 fi
