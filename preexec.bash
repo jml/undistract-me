@@ -79,7 +79,7 @@ function preexec_invoke_exec () {
     # variable, but using history here is better in some ways: for example, "ps
     # auxf | less" will show up with both sides of the pipe if we use history,
     # but only as "ps auxf" if not.
-    local this_command=`history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`;
+    local this_command=`HISTTIMEFORMAT= history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`;
 
     # If none of the previous checks have earlied out of this function, then
     # the command is in fact interactive and we should invoke the user's
