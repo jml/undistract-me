@@ -107,7 +107,7 @@ function preexec_install () {
     if [ -n "$PROMPT_COMMAND" ]; then
         PROMPT_COMMAND="preexec_set_exit;${PROMPT_COMMAND};preexec_invoke_cmd";
     else
-        PROMPT_COMMAND="preexec_invoke_cmd";
+        PROMPT_COMMAND="preexec_set_exit;preexec_invoke_cmd";
     fi
 }
 
