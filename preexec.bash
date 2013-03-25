@@ -60,15 +60,8 @@ function preexec_invoke_exec () {
         # an interactively issued command.
         return
     fi
-    # If we're in a subshell, then the prompt won't be re-displayed to put
-    # us back into interactive mode, so let's not set the variable back.
-    # In other words, if you have a subshell like
-    #   (sleep 1; sleep 2)
-    # You want to see the 'sleep 2' as a set_command_title as well.
-    if [[ 0 -eq "$BASH_SUBSHELL" ]]
-    then
-        trap '' DEBUG
-    fi
+    trap '' DEBUG
+
     if [[ "preexec_invoke_cmd" == "$BASH_COMMAND" ]]
     then
         # Sadly, there's no cleaner way to detect two prompts being displayed
@@ -79,7 +72,6 @@ function preexec_invoke_exec () {
 
         # Given their buggy interaction between BASH_COMMAND and debug traps,
         # versions of bash prior to 3.1 can't detect this at all.
-        trap '' DEBUG
         return
     fi
 
@@ -87,12 +79,16 @@ function preexec_invoke_exec () {
     # variable, but using history here is better in some ways: for example, "ps
     # auxf | less" will show up with both sides of the pipe if we use history,
     # but only as "ps auxf" if not.
-    local this_command=`history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`;
+    local this_command=`HISTTIMEFORMAT= history 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g"`;
 
     # If none of the previous checks have earlied out of this function, then
     # the command is in fact interactive and we should invoke the user's
     # preexec hook with the running command as an argument.
     preexec "$this_command"
+}
+
+function preexec_set_exit () {
+    __preexec_exit_status=$?
 }
 
 # Execute this to set up preexec and precmd execution.
@@ -109,9 +105,9 @@ function preexec_install () {
 
     # Finally, install the actual traps.
     if [ -n "$PROMPT_COMMAND" ]; then
-        PROMPT_COMMAND="${PROMPT_COMMAND};preexec_invoke_cmd";
+        PROMPT_COMMAND="preexec_set_exit;${PROMPT_COMMAND};preexec_invoke_cmd";
     else
-        PROMPT_COMMAND="preexec_invoke_cmd";
+        PROMPT_COMMAND="preexec_set_exit;preexec_invoke_cmd";
     fi
 }
 
