@@ -72,11 +72,16 @@ function notify_when_long_running_commands_finish_install() {
 			icon=dialog-error
 			urgency=normal
 		    fi
-                    notify-send \
-                        -i $icon \
-                        -u $urgency \
-                        "Long command completed" \
+                    notify=$(command -v notify-send)
+                    if [ -n "$notify" ]; then
+                        $notify \
+                            -i $icon \
+                            -u $urgency \
+                            "Long command completed" \
                         "\"$__udm_last_command\" took $time_taken_human"
+                    else
+                        echo -ne "\a"
+                    fi
                 fi
                 if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
