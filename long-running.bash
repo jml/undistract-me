@@ -73,7 +73,7 @@ function notify_when_long_running_commands_finish_install() {
 			urgency=normal
 		    fi
                     notify=$(command -v notify-send)
-                    if [ -n "$notify" ]; then
+                    if [ -x "$notify" ]; then
                         $notify \
                             -i $icon \
                             -u $urgency \
