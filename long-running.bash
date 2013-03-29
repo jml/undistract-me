@@ -64,8 +64,10 @@ function notify_when_long_running_commands_finish_install() {
                 [[ $current_window == "nowindowid" ]] ; then
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local time_taken_human=$(sec_to_human $time_taken)
+                local appname=$(basename "${__udm_last_command%% *}")
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
-                    [[ -n $DISPLAY ]] ; then
+                    [[ -n $DISPLAY ]] &&
+                    [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
                     local icon=dialog-information
                     local urgency=low
                     if [[ $__preexec_exit_status != 0 ]]; then
