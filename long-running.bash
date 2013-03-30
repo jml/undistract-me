@@ -64,14 +64,16 @@ function notify_when_long_running_commands_finish_install() {
                 [[ $current_window == "nowindowid" ]] ; then
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local time_taken_human=$(sec_to_human $time_taken)
+                local appname=$(basename "${__udm_last_command%% *}")
                 if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
-                    [[ -n $DISPLAY ]] ; then
-		    local icon=dialog-information
-		    local urgency=low
-		    if [[ $__preexec_exit_status != 0 ]]; then
-			icon=dialog-error
-			urgency=normal
-		    fi
+                    [[ -n $DISPLAY ]] &&
+                    [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
+                    local icon=dialog-information
+                    local urgency=low
+                    if [[ $__preexec_exit_status != 0 ]]; then
+                        icon=dialog-error
+                        urgency=normal
+                    fi
                     notify-send \
                         -i $icon \
                         -u $urgency \
@@ -82,7 +84,7 @@ function notify_when_long_running_commands_finish_install() {
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
                     [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] ; then
                     # put in brackets to make it quiet
-		    export __preexec_exit_status
+                    export __preexec_exit_status
                     ( $LONG_RUNNING_COMMAND_CUSTOM \
                         "\"$__udm_last_command\" took $time_taken_human" & )
                 fi
@@ -91,7 +93,7 @@ function notify_when_long_running_commands_finish_install() {
     }
 
     function preexec () {
-	# use __udm to avoid global name conflicts
+        # use __udm to avoid global name conflicts
         __udm_last_command_started=$(printf "%(%s)T\n" -1)
         __udm_last_command=$(echo "$1")
         __udm_last_window=$(active_window_id)

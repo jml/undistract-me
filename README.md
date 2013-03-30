@@ -46,6 +46,8 @@ or log out then log in again.
 By default, a long-running command is any command that takes more than 10s to
 complete.  If this default is not right for you, set
 `LONG_RUNNING_COMMAND_TIMEOUT` to a different number of seconds and export it.
+It is possible to disable notifications for certain commands by adding them 
+space-separated to `LONG_RUNNING_IGNORE_LIST` variable.
 
 ## Licensing
 
