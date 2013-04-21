@@ -15,7 +15,7 @@ fi
 
 # The pre-exec hook functionality is in a separate branch.
 if [ -z "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
-    LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
+    LONG_RUNNING_PREEXEC_LOCATION=$(dirname $(readlink -f $BASH_SOURCE))/preexec.bash
 fi
 
 if [ -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
