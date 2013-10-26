@@ -27,6 +27,14 @@ fi
 
 function notify_when_long_running_commands_finish_install() {
 
+    function get_now() {
+        local secs
+        if ! secs=$(printf "%(%s)T" -1 2> /dev/null) ; then
+            secs=$(date +'%s')
+        fi
+        echo $secs
+    }
+
     function active_window_id () {
         if [[ -n $DISPLAY ]] ; then
             set - $(xprop -root _NET_ACTIVE_WINDOW)
@@ -58,7 +66,7 @@ function notify_when_long_running_commands_finish_install() {
         if [[ -n "$__udm_last_command_started" ]]; then
             local now current_window
 
-            printf -v now "%(%s)T" -1
+            now=$(get_now)
             current_window=$(active_window_id)
             if [[ $current_window != $__udm_last_window ]] ||
                 [[ $current_window == "nowindowid" ]] ; then
@@ -100,7 +108,7 @@ function notify_when_long_running_commands_finish_install() {
 
     function preexec () {
         # use __udm to avoid global name conflicts
-        __udm_last_command_started=$(printf "%(%s)T\n" -1)
+        __udm_last_command_started=$(get_now)
         __udm_last_command=$(echo "$1")
         __udm_last_window=$(active_window_id)
     }
