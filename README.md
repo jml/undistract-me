@@ -36,6 +36,7 @@ that took longer than ten seconds to finish.
 ### From a PPA
 
     $ sudo add-apt-repository ppa:undistract-me-packagers/daily
+    $ sudo apt-get update
     $ sudo apt-get install undistract-me
 
 Then run a login shell: start a whole new Gnome Terminal, run `bash --login`
