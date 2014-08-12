@@ -1,5 +1,5 @@
 #!/bin/sh
-sudo echo "if ! [ -z "$BASH_VERSION" -o -z "$PS1" -o -n "$last_command_started_cache" ]; then" >> /etc/bash.bashrc
-sudo echo ". /usr/share/undistract-me/long-running.bash" >> /etc/bash.bashrc
-sudo echo "notify_when_long_running_commands_finish_install" >> /etc/bash.bashrc
-sudo echo "fi" >> /etc/bash.bashrc
+echo "if ! [ -z "$BASH_VERSION" -o -z "$PS1" -o -n "$last_command_started_cache" ]; then" >> ~/.bashrc
+echo ". /usr/share/undistract-me/long-running.bash" >> ~/.bashrc
+echo "notify_when_long_running_commands_finish_install" >> ~/.bashrc
+echo "fi" >> ~/.bashrc
