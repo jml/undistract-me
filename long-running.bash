@@ -18,6 +18,10 @@ if [ -z "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
     LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
 fi
 
+if [ ! -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
+    LONG_RUNNING_PREEXEC_LOCATION="$( dirname "${BASH_SOURCE[0]}" )/preexec.bash"
+fi
+
 if [ -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
     . $LONG_RUNNING_PREEXEC_LOCATION
 else
