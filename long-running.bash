@@ -28,6 +28,9 @@ else
     echo "Could not find preexec.bash"
 fi
 
+if [ ! -f "$LONG_RUNNING_NOTIFICATION_SOUND" ]; then
+    LONG_RUNNING_NOTIFICATION_SOUND="/usr/share/sounds/freedesktop/stereo/complete.oga"
+fi
 
 function notify_when_long_running_commands_finish_install() {
 
@@ -93,6 +96,13 @@ function notify_when_long_running_commands_finish_install() {
                         -u $urgency \
                         "Command completed in $time_taken_human" \
                         "$__udm_last_command"
+                    else
+                        echo -ne "\a"
+                    fi
+
+                    paplay=$(command -v paplay)
+                    if [ -x "$paplay" ]; then
+                        $paplay $LONG_RUNNING_NOTIFICATION_SOUND
                     else
                         echo -ne "\a"
                     fi
