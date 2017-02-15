@@ -24,6 +24,11 @@
 
 # Copy screen-run variables from the remote host, if they're available.
 
+if [[ -z "$BASH_VERSION" ]]
+then
+  return
+fi
+
 if [[ "$SCREEN_RUN_HOST" == "" ]]
 then
     SCREEN_RUN_HOST="$LC_SCREEN_RUN_HOST"
