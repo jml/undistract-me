@@ -10,7 +10,7 @@ Package: undistract-me
 Architecture: all
 Section: misc
 Priority: extra
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin, pulseaudio-utils, sound-theme-freedesktop
 Description: Notifies you when long-running terminal commands complete.
  .
  Uses notify-send to alert users whenever a shell command completes that took
