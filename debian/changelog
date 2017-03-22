@@ -1,3 +1,9 @@
+undistract-me (0.1.0ubuntu1) UNRELEASED; urgency=medium
+
+  * Added option to play sound along with notification.
+
+ -- Akshay Naik <akshay@infineos.nowhere>  Wed, 22 Mar 2017 23:41:40 +0530
+
 undistract-me (0.1.0) quantal; urgency=low
 
   * Initial release of undistract-me
