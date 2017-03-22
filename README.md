@@ -50,6 +50,13 @@ complete.  If this default is not right for you, set
 It is possible to disable notifications for certain commands by adding them 
 space-separated to `LONG_RUNNING_IGNORE_LIST` variable.
 
+In addition to a visual notification you can make undistract-me notify you 
+by playing an audible sound along with the nitification popup by simply 
+setting the variable UDM_PLAY_SOUND to a non-zero integer on the command line.
+This functionality requires that pluseaudio and sound-theme-freedesktop 
+- which provides notification sound file - be installed on a Debian-based 
+system.
+
 ## Licensing
 
 All of undistract-me, including this file, is made available with the Expat

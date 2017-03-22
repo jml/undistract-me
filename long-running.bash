@@ -13,6 +13,11 @@ if [ -z "$LONG_RUNNING_COMMAND_TIMEOUT" ]; then
     LONG_RUNNING_COMMAND_TIMEOUT=10
 fi
 
+# Default is not to play sound along with notification. (0 is false, non-zero is true.)
+if [ -z "$UDM_PLAY_SOUND" ]; then
+	UDM_PLAY_SOUND=0
+fi
+
 # The pre-exec hook functionality is in a separate branch.
 if [ -z "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
     LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
@@ -93,6 +98,9 @@ function notify_when_long_running_commands_finish_install() {
                         -u $urgency \
                         "Command completed in $time_taken_human" \
                         "$__udm_last_command"
+                        if [[ "$UDM_PLAY_SOUND" != 0 ]]; then
+                            paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+                        fi
                     else
                         echo -ne "\a"
                     fi
