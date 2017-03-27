@@ -94,7 +94,7 @@ function notify_when_long_running_commands_finish_install() {
                     notify=$(command -v notify-send)
                     if [ -x "$notify" ]; then
                         $notify \
-                        -i $icon \
+                        -i terminal \
                         -u $urgency \
                         "Command completed in $time_taken_human" \
                         "$__udm_last_command"
