@@ -39,7 +39,7 @@ function notify_when_long_running_commands_finish_install() {
     function get_now() {
         local secs
         if ! secs=$(printf "%(%s)T" -1 2> /dev/null) ; then
-            secs=$(date +'%s')
+            secs=$(\date +'%s')
         fi
         echo $secs
     }
