@@ -76,21 +76,21 @@ function notify_when_long_running_commands_finish_install() {
             local now current_window
 
             now=$(get_now)
-            current_window=$(active_window_id)
-            if [[ $current_window != $__udm_last_window ]] ||
-                [[ $current_window == "nowindowid" ]] ; then
-                local time_taken=$(( $now - $__udm_last_command_started ))
-                local time_taken_human=$(sec_to_human $time_taken)
-                local appname=$(basename "${__udm_last_command%% *}")
-                if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
-                    [[ -n $DISPLAY ]] &&
-                    [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
-                    local icon=dialog-information
-                    local urgency=low
-                    if [[ $__preexec_exit_status != 0 ]]; then
-                        icon=dialog-error
-                        urgency=normal
-                    fi
+            local time_taken=$(( $now - $__udm_last_command_started ))
+            local time_taken_human=$(sec_to_human $time_taken)
+            local appname=$(basename "${__udm_last_command%% *}")
+            if [[ $time_taken -gt $LONG_RUNNING_COMMAND_TIMEOUT ]] &&
+                [[ -n $DISPLAY ]] &&
+                [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
+                local icon=dialog-information
+                local urgency=low
+                if [[ $__preexec_exit_status != 0 ]]; then
+                    icon=dialog-error
+                    urgency=normal
+                fi
+                current_window=$(active_window_id)
+                if [[ $current_window != $__udm_last_window ]] ||
+                    [[ $current_window == "nowindowid" ]] ; then
                     notify=$(command -v notify-send)
                     if [ -x "$notify" ]; then
                         $notify \
@@ -104,15 +104,24 @@ function notify_when_long_running_commands_finish_install() {
                     else
                         echo -ne "\a"
                     fi
+
+                    if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
+                        [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
+                        [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
+                        [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
+                        # put in brackets to make it quiet
+                        export __preexec_exit_status
+                        ( $LONG_RUNNING_COMMAND_CUSTOM \
+                            "\"$__udm_last_command\" took $time_taken_human" & )
+                    fi
                 fi
-                if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
-                    [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
-                    [[ $time_taken -gt $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
-                    [[ ! " $LONG_RUNNING_IGNORE_LIST " == *" $appname "* ]] ; then
-                    # put in brackets to make it quiet
-                    export __preexec_exit_status
-                    ( $LONG_RUNNING_COMMAND_CUSTOM \
-                        "\"$__udm_last_command\" took $time_taken_human" & )
+
+                # If screen is locked, also send email if provided
+                if [ -n "$LONG_RUNNING_EMAIL_RECIPIENT" ]; then
+                    if (gnome-screensaver-command -q | grep -q "is active"); then
+                        echo "\"$__udm_last_command\" took $time_taken_human" \
+                            | mail -s "Command completed ${icon/dialog-}" "$LONG_RUNNING_EMAIL_RECIPIENT"
+                    fi
                 fi
             fi
         fi
