@@ -50,6 +50,11 @@ complete.  If this default is not right for you, set
 It is possible to disable notifications for certain commands by adding them 
 space-separated to `LONG_RUNNING_IGNORE_LIST` variable.
 
+By default, the notification will only show if the active window is not the 
+window the command is running in. If this is not right for you, (eg. if you 
+are an Emacs user), you can set IGNORE_WINDOW_CHECK to 1 to skip the window
+check.
+
 In addition to a visual notification you can make undistract-me notify you 
 by playing an audible sound along with the nitification popup by simply 
 setting the variable UDM_PLAY_SOUND to a non-zero integer on the command line.
