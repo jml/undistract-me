@@ -78,6 +78,7 @@ function notify_when_long_running_commands_finish_install() {
             now=$(get_now)
             current_window=$(active_window_id)
             if [[ $current_window != $__udm_last_window ]] ||
+                 [[ ! -z "$IGNORE_WINDOW_CHECK" ]] ||
                 [[ $current_window == "nowindowid" ]] ; then
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local time_taken_human=$(sec_to_human $time_taken)
