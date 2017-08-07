@@ -27,17 +27,15 @@ that took longer than ten seconds to finish.
 
 ## Installation
 
+### From the Ubuntu repositories
+
+    $ sudo apt install undistract-me
+
 ### From the branch
 
     $ bzr checkout --lightweight lp:undistract-me
     $ . undistract-me/long-running.bash
     $ notify_when_long_running_commands_finish_install
-
-### From a PPA
-
-    $ sudo add-apt-repository ppa:undistract-me-packagers/daily
-    $ sudo apt-get update
-    $ sudo apt-get install undistract-me
 
 Then run a login shell: start a whole new Gnome Terminal, run `bash --login`
 or log out then log in again.
