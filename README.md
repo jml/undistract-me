@@ -37,8 +37,9 @@ that took longer than ten seconds to finish.
     $ . undistract-me/long-running.bash
     $ notify_when_long_running_commands_finish_install
 
-Then run a login shell: start a whole new Gnome Terminal, run `bash --login`
-or log out then log in again.
+### Add to your Bash
+
+    $ echo 'source /etc/profile.d/undistract-me.sh' >> ~/.bashrc
 
 ## Configuration
 
