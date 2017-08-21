@@ -55,7 +55,7 @@ are an Emacs user), you can set IGNORE_WINDOW_CHECK to 1 to skip the window
 check.
 
 In addition to a visual notification you can make undistract-me notify you 
-by playing an audible sound along with the nitification popup by simply 
+by playing an audible sound along with the notification popup by simply 
 setting the variable UDM_PLAY_SOUND to a non-zero integer on the command line.
 This functionality requires that pluseaudio and sound-theme-freedesktop 
 - which provides notification sound file - be installed on a Debian-based 
