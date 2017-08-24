@@ -57,7 +57,7 @@ check.
 In addition to a visual notification you can make undistract-me notify you 
 by playing an audible sound along with the notification popup by simply 
 setting the variable UDM_PLAY_SOUND to a non-zero integer on the command line.
-This functionality requires that pulseaudio and sound-theme-freedesktop 
+This functionality requires that pulseaudio-utils and sound-theme-freedesktop 
 (which provides the notification sound file) be installed on a Debian-based 
 system.
 
