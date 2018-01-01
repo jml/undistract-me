@@ -46,8 +46,7 @@ function notify_when_long_running_commands_finish_install() {
 
     function active_window_id () {
         if [[ -n $DISPLAY ]] ; then
-            set - $(xprop -root _NET_ACTIVE_WINDOW)
-            echo $5
+            xprop -root _NET_ACTIVE_WINDOW | awk '{print $5}'
             return
         fi
         echo nowindowid
