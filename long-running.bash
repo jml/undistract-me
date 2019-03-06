@@ -125,5 +125,8 @@ function notify_when_long_running_commands_finish_install() {
         __udm_last_window=$(active_window_id)
     }
 
-    preexec_install
+    if [ ! -n "$BASH" ];  then
+        # ZSH knows precmd and preexec, so this is unnecessary there (and broken too)
+        preexec_install
+    fi
 }
