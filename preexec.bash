@@ -93,15 +93,16 @@ function preexec_set_exit () {
 
 # Execute this to set up preexec and precmd execution.
 function preexec_install () {
+    if [[ "$SHELL" =~ "bash" ]]; then
+        # *BOTH* of these options need to be set for the DEBUG trap to be invoked
+        # in ( ) subshells.  This smells like a bug in bash to me.  The null stderr
+        # redirections are to quiet errors on bash2.05 (i.e. OSX's default shell)
+        # where the options can't be set, and it's impossible to inherit the trap
+        # into subshells.
 
-    # *BOTH* of these options need to be set for the DEBUG trap to be invoked
-    # in ( ) subshells.  This smells like a bug in bash to me.  The null stderr
-    # redirections are to quiet errors on bash2.05 (i.e. OSX's default shell)
-    # where the options can't be set, and it's impossible to inherit the trap
-    # into subshells.
-
-    set -o functrace > /dev/null 2>&1
-    shopt -s extdebug > /dev/null 2>&1
+        set -o functrace > /dev/null 2>&1
+        shopt -s extdebug > /dev/null 2>&1
+    fi
 
     # Finally, install the actual traps.
     if [ -n "$PROMPT_COMMAND" ]; then
