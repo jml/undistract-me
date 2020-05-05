@@ -89,6 +89,7 @@ function preexec_invoke_exec () {
 
 function preexec_set_exit () {
     __preexec_exit_status=$?
+    return $__preexec_exit_status
 }
 
 # Execute this to set up preexec and precmd execution.
