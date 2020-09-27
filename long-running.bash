@@ -69,7 +69,7 @@ function notify_when_long_running_commands_finish_install() {
         echo $H$M$S
     }
 
-    function precmd () {
+    function __udm_precmd () {
 
         if [[ -n "$__udm_last_command_started" ]]; then
             local now current_window
@@ -118,12 +118,15 @@ function notify_when_long_running_commands_finish_install() {
         fi
     }
 
-    function preexec () {
+    function __udm_preexec () {
         # use __udm to avoid global name conflicts
         __udm_last_command_started=$(get_now)
         __udm_last_command=$(echo "$1")
         __udm_last_window=$(active_window_id)
     }
+
+    precmd_functions+=(__udm_precmd)
+    preexec_functions+=(__udm_preexec)
 
     preexec_install
 }
