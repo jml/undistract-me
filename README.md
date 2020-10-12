@@ -1,3 +1,12 @@
+## Important note
+
+This is a fork of [jml/undistract-me](https://github.com/jml/undistract-me). The original project uses `bash-preexec` incorrectly, making it incompatible with other scripts such as [bash-command-timer](https://github.com/qbouvet/undistract-me/archive/0.1.0.tar.gz), [bash-timer](https://github.com/hopeseekr/bash-timer). 
+
+I have a [pull-request](https://github.com/jml/undistract-me/issues/67) pending on the original project, but the authors seem to have abandonned the project. I made this fork because I need the feature. 
+
+When/If the pull request is accepted, this fork will be deleted.
+
+
 # undistract-me
 
 Notifies you when long-running terminal commands complete.
