@@ -1,4 +1,4 @@
-# Important note
+## Important note
 
 This is a fork of [jml/undistract-me]. The original project uses `bash-preexec` incorrectly, making it incompatible with other scripts such as [bash-command-timer](https://github.com/qbouvet/undistract-me/archive/0.1.0.tar.gz), [bash-timer](https://github.com/hopeseekr/bash-timer). 
 
