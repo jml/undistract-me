@@ -18,19 +18,43 @@ if [ -z "$UDM_PLAY_SOUND" ]; then
 	UDM_PLAY_SOUND=0
 fi
 
-# The pre-exec hook functionality is in a separate branch.
-if [ -z "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
-    LONG_RUNNING_PREEXEC_LOCATION=/usr/share/undistract-me/preexec.bash
-fi
 
-if [ ! -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
-    LONG_RUNNING_PREEXEC_LOCATION="$( dirname "${BASH_SOURCE[0]}" )/preexec.bash"
-fi
-
-if [ -f "$LONG_RUNNING_PREEXEC_LOCATION" ]; then
-    . $LONG_RUNNING_PREEXEC_LOCATION
-else
+# Find and source bash-preexec
+#  - If an up-to-date version of bash-preexec is installed at standard 
+#    location, then it is used
+#  - Otherwise, the outdated version of bash-preexec shipped with 
+#    undistract-me is used
+function __udm_callback_with_mainline_bashpreexec() {
+  source "$1"
+  preexec_functions+=(__udm_preexec)
+  precmd_functions+=(__udm_precmd)
+}
+function __udm_callback_with_outdated_bashpreexec() {
+  source "$1"
+  preexec=__udm_preexec
+  precmd=__udm_precmd
+  preexec_install
+}
+# Case 1: find bash-preexec in common installation locations
+__udm_register_callbacks=__udm_callback_with_mainline_bashpreexec
+if [ -f '/usr/share/bash-preexec/bash-preexec.sh' ]; then 
+  __udm_bash_preexec_path='/usr/share/bash-preexec/bash-preexec.sh'
+elif [ -f '~/.bash-preexec.sh' ]; then 
+  __udm_bash_preexec_path='~/.bash-preexec.sh'
+# Case 2: Fallback: use outdated, shipped-along bash-preexec
+else 
+  __udm_register_callbacks=__udm_callback_with_outdated_bashpreexec
+  # The pre-exec hook functionality is in a separate branch.
+  __udm_bash_preexec_path="$LONG_RUNNING_PREEXEC_LOCATION"
+  if [ -z "$__udm_bash_preexec_path" ]; then
+    __udm_bash_preexec_path="/usr/share/undistract-me/preexec.bash"
+  fi
+  if [ ! -f "$__udm_bash_preexec_path" ]; then
+    __udm_bash_preexec_path="$( dirname "${BASH_SOURCE[0]}" )/preexec.bash"
+  fi
+  if ! [ -f "$__udm_bash_preexec_path" ]; then
     echo "Could not find preexec.bash"
+  fi  
 fi
 
 
@@ -69,7 +93,7 @@ function notify_when_long_running_commands_finish_install() {
         echo $H$M$S
     }
 
-    function precmd () {
+    function __udm_precmd () {
 
         if [[ -n "$__udm_last_command_started" ]]; then
             local now current_window
@@ -99,7 +123,7 @@ function notify_when_long_running_commands_finish_install() {
                         "Command completed in $time_taken_human" \
                         "$__udm_last_command"
                         if [[ "$UDM_PLAY_SOUND" != 0 ]]; then
-                            paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+                            paplay /usr/share/sounds/freedesktop/stereo/complete.oga &
                         fi
                     else
                         echo -ne "\a"
@@ -118,12 +142,12 @@ function notify_when_long_running_commands_finish_install() {
         fi
     }
 
-    function preexec () {
+    function __udm_preexec () {
         # use __udm to avoid global name conflicts
         __udm_last_command_started=$(get_now)
         __udm_last_command=$(echo "$1")
         __udm_last_window=$(active_window_id)
     }
 
-    preexec_install
+    $__udm_register_callbacks "$__udm_bash_preexec_path"
 }
