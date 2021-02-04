@@ -106,7 +106,9 @@ function preexec_install () {
 
     # Finally, install the actual traps.
     if [ -n "$PROMPT_COMMAND" ]; then
-        PROMPT_COMMAND="preexec_set_exit;${PROMPT_COMMAND};preexec_invoke_cmd";
+        # Any trailing semicolon will cause bash to complain about syntax error
+        # near ";;".
+        PROMPT_COMMAND="preexec_set_exit;${PROMPT_COMMAND%;};preexec_invoke_cmd";
     else
         PROMPT_COMMAND="preexec_set_exit;preexec_invoke_cmd";
     fi
