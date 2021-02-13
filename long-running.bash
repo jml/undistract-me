@@ -125,5 +125,5 @@ function notify_when_long_running_commands_finish_install() {
         __udm_last_window=$(active_window_id)
     }
 
-    preexec_install
+    command -v "preexec_install" &> /dev/null && preexec_install
 }
