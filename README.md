@@ -31,6 +31,10 @@ that took longer than ten seconds to finish.
 
     $ sudo apt install undistract-me
 
+### From the Arch Linux's AUR
+
+    $ yay -S undistract-me-git
+
 ### From the branch
 
     $ bzr checkout --lightweight lp:undistract-me
