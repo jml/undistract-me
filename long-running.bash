@@ -125,5 +125,13 @@ function notify_when_long_running_commands_finish_install() {
         __udm_last_window=$(active_window_id)
     }
 
-    preexec_install
+    if [[ ! -n "$ZSH_VERSION" ]]; then
+        # BASH needs some trap hackery to implement precmd and preexec
+        preexec_install
+    else
+        # ZSH knows precmd and preexec, and the BASH traps in preexec_install are errors.
+	# So we need to instead call preexec_set_exit in precmd to have __preexec_exit_status set.
+	# The following line patches precmd, since doing an `if` in there would reset $?
+	eval "$(whence -f precmd | sed '2ipreexec_set_exit')"
+    fi
 }
