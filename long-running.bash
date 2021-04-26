@@ -46,10 +46,13 @@ function notify_when_long_running_commands_finish_install() {
 
     function active_window_id () {
         if [[ -n $DISPLAY ]] ; then
-            xprop -root _NET_ACTIVE_WINDOW | awk '{print $5}'
-            return
+            active_window=$(xprop -root _NET_ACTIVE_WINDOW)
+            if [ $? -eq 0 ]; then
+                echo "$active_window" | awk '{print $5}'
+                return
+            fi
         fi
-        echo nowindowid
+        echo 0x0
     }
 
     function sec_to_human () {
@@ -78,7 +81,7 @@ function notify_when_long_running_commands_finish_install() {
             current_window=$(active_window_id)
             if [[ $current_window != $__udm_last_window ]] ||
                  [[ ! -z "$IGNORE_WINDOW_CHECK" ]] ||
-                [[ $current_window == "nowindowid" ]] ; then
+                [[ $current_window == "0x0" ]] ; then
                 local time_taken=$(( $now - $__udm_last_command_started ))
                 local time_taken_human=$(sec_to_human $time_taken)
                 local appname=$(basename "${__udm_last_command%% *}")
