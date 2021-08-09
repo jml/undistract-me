@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ -f "/usr/share/undistract-me/bashrc.txt" ]
+then
+	exit
+else
+	echo "Code has already been added to the bashrc file."	> /usr/share/undistract-me/bashrc.txt
+	echo 'if ! [ -z "$BASH_VERSION" -o -z "$PS1" -o -n "$last_command_started_cache" ]; then' >> /etc/bash.bashrc
+	echo ' . /usr/share/undistract-me/long-running.bash' >> /etc/bash.bashrc
+	echo '  notify_when_long_running_commands_finish_install' >> /etc/bash.bashrc
+	echo 'fi' >> /etc/bash.bashrc	
+fi
