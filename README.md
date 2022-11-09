@@ -68,7 +68,7 @@ license.  See `LICENSE` for details.
 
 ## Getting help
 
-There's no dedicated IRC channel, but feel free to ping `jml` on Freenode,
+There's no dedicated IRC channel, but feel free to ping `jml` on Libera.Chat,
 probably in the `#ubuntu-devel` channel.
 
 Alternatively, ask questions or file bugs on the
